@@ -611,7 +611,7 @@ static long parse_inst_alu_targets(const char* tok)
 	#define TOK_TARGET_SEP_LEN strlen(TOK_TARGET_SEP)
 
 	size_t tok_len = strlen(tok);
-	char tok_copy[tok_len];
+	char tok_copy[tok_len + 1];
 	if (!str_copy(tok_copy, tok, tok_len))
 		return -1;
 
