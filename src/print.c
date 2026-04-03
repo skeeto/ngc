@@ -17,7 +17,9 @@ void print_err(const char* str, ...)
 
 void print_dbg(const char* str, ...)
 {
-#if DEBUG
+#if NDEBUG
+	(void)str;
+#else
 	va_list args;
 	va_start(args, str);
 
@@ -26,7 +28,5 @@ void print_dbg(const char* str, ...)
 	va_end(args);
 
 	fprintf(stderr, EOL);
-#else
-	(void)str;
 #endif
 }

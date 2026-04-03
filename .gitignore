@@ -3,6 +3,7 @@
 !README.md
 !LICENSE
 !makefile
+!CMakeLists.txt
 !src/**
 !man/**
 !test/**
