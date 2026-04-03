@@ -40,6 +40,20 @@ install(TARGETS ngc-asm ngc-emu RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Tests
 enable_testing()
-add_test(NAME test-asm
-  COMMAND ${CMAKE_SOURCE_DIR}/test/asm/test.sh $<TARGET_FILE:ngc-asm>
-)
+set(run_one ${CMAKE_SOURCE_DIR}/test/asm/run_one.sh)
+
+file(GLOB pos_tests test/asm/positive/*.in)
+foreach(in_file ${pos_tests})
+  get_filename_component(test_name ${in_file} NAME_WE)
+  add_test(NAME asm/positive/${test_name}
+    COMMAND ${run_one} $<TARGET_FILE:ngc-asm> positive ${in_file}
+  )
+endforeach()
+
+file(GLOB neg_tests test/asm/negative/*.in)
+foreach(in_file ${neg_tests})
+  get_filename_component(test_name ${in_file} NAME_WE)
+  add_test(NAME asm/negative/${test_name}
+    COMMAND ${run_one} $<TARGET_FILE:ngc-asm> negative ${in_file}
+  )
+endforeach()
