@@ -38,6 +38,25 @@ target_include_directories(ngc-emu PRIVATE src/emu ${CURSES_INCLUDE_DIRS})
 include(GNUInstallDirs)
 install(TARGETS ngc-asm ngc-emu RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+# Fuzzer (clang only, not built by default: cmake --build build -t fuzz_asm)
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  add_executable(fuzz_asm EXCLUDE_FROM_ALL
+    test/fuzz/fuzz_asm.c
+    src/print.c
+    src/dynarr.c
+    src/asm/str.c
+    src/asm/err.c
+    src/asm/parsed.c
+    src/asm/parse.c
+    src/asm/assemble.c
+    src/asm/assemble_basic.c
+    src/asm/assemble_full.c
+  )
+  target_include_directories(fuzz_asm PRIVATE src src/asm)
+  target_compile_options(fuzz_asm PRIVATE -fsanitize=fuzzer,address,undefined -g -O1)
+  target_link_options(fuzz_asm PRIVATE -fsanitize=fuzzer,address,undefined)
+endif()
+
 # Tests
 enable_testing()
 set(run_one ${CMAKE_SOURCE_DIR}/test/asm/run_one.sh)
